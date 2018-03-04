@@ -12,6 +12,8 @@ class HomeViewController: UIViewController {
 
     // MARK: - Properties
     
+    var rootContainer: RootContainerController?
+    
     private lazy var switch_PanelToggle: UISwitch = {
         let toggler = UISwitch()
         toggler.isOn = false
@@ -23,6 +25,14 @@ class HomeViewController: UIViewController {
     
     @objc func togglePanel(_ sender: UISwitch) {
         print("toggle panel")
+        UIView.animate(withDuration: 0.3) {
+            let newConstantForPanelTop: CGFloat = self.rootContainer!.isHidden ?  -110 : 0
+            let newConstantForTabBarBottom: CGFloat = self.rootContainer!.isHidden ?  -110 : -60
+            self.rootContainer!.isHidden = !self.rootContainer!.isHidden
+            self.rootContainer!.tabBarBottomConstraint.constant = newConstantForTabBarBottom
+            self.rootContainer!.panelViewTopConstraint.constant = newConstantForPanelTop
+            self.rootContainer!.view.layoutIfNeeded()
+        }
     }
     
     // MARK: Override
@@ -32,7 +42,7 @@ class HomeViewController: UIViewController {
         
         // Configure
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .yellow
         
         self.view.addSubview(self.switch_PanelToggle)
         self.switch_PanelToggle.translatesAutoresizingMaskIntoConstraints = false
